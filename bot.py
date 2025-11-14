@@ -1,10 +1,9 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
-import os  # rasmlarni papkadan olish uchun
+import os
 
 TOKEN = "8431361772:AAFtxqvzhwblOJ2q7kSq-3urpiLG0wxdiHc"
 
-# Start komandasi
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("📄 About Me", callback_data="about")],
@@ -12,33 +11,41 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("📷 Gallery", callback_data="gallery")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text(
-        "Salom! Men Yosinxonning botiman. Quyidagi tugmalardan tanlang:", 
-        reply_markup=reply_markup
+    welcome_text = (
+        "👋 Salom, men Yosinxonning botiman!\n\n"
+        "Quyidagi tugmalardan birini tanlab, men bilan tanishing:\n"
+        "• 📄 About Me\n"
+        "• 🌐 Instagram\n"
+        "• 📷 Gallery"
     )
+    await update.message.reply_text(welcome_text, reply_markup=reply_markup)
 
-# Tugmalar uchun javob
 async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
     if query.data == "about":
-        await query.edit_message_text(
-            "👤 Ismim: Yosinxon\n🎂 Yoshim: 18\n💻 Qiziqish: IT, futbol, CS2, efootballmobile va MLBB"
+        about_text = (
+            "👤 Ismim: Yosinxon\n"
+            "🎂 Yoshim: 18\n"
+            "💻 Qiziqishlar: IT, futbol, CS2,efootball mobile va MLBB\n"
+            "📍 Joylashuv: Namangan shahar"
         )
+        await query.edit_message_text(about_text)
+    
     elif query.data == "instagram":
-        keyboard = [
-            [InlineKeyboardButton("Instagram sahifam", url="https://www.instagram.com/rudy__o0/")]
-        ]
+        keyboard = [[InlineKeyboardButton("📸 Instagram sahifam", url="https://www.instagram.com/rudy__o0/")]]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await query.edit_message_text("🌐 Instagram:", reply_markup=reply_markup)
+        await query.edit_message_text("🌐 Men Instagramda ham kuzatishingiz mumkin:", reply_markup=reply_markup)
+
     elif query.data == "gallery":
-        images_folder = "images"  # hostingga yuklagan images papkang nomi
+        images_folder = "images"
         try:
             for filename in sorted(os.listdir(images_folder)):
                 if filename.lower().endswith((".jpg", ".jpeg", ".png", ".gif")):
+                    caption_text = f"🖼 Rasm: {filename}"
                     with open(os.path.join(images_folder, filename), "rb") as f:
-                        await context.bot.send_photo(chat_id=query.message.chat_id, photo=f)
+                        await context.bot.send_photo(chat_id=query.message.chat_id, photo=f, caption=caption_text)
             await query.edit_message_text("📷 Rasmlar ko‘rsatildi!")
         except Exception as e:
             await query.edit_message_text(f"❌ Rasmni yuklab bo‘lmadi: {e}")
