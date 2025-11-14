@@ -27,7 +27,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data == "home":
         await query.edit_message_text(
             "🏠 *Bosh sahifa*\n\n"
-            "_Men Yosinxonning shaxsiy botiman. Men bilan interaktiv tarzda suhbatlashing va mini-sayt bo‘limlarini ko‘ring!_",
+            "_Men Yosinxonning shaxsiy botiman. Men bilan interaktiv tarzda suhbatlashing va qiziqarli funksiyalardan foydalaning!_",
             parse_mode="Markdown"
         )
 
@@ -36,7 +36,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "👤 *About Me*\n\n"
             "*Ism:* Yosinxon\n"
             "*Yosh:* 18\n"
-            "*Qiziqishlar:* IT, futbol, CS2, eFootball mobile va MLBB",
+            "*Qiziqishlar:* IT, futbol, CS2 va MLBB",
             parse_mode="Markdown"
         )
 
@@ -59,3 +59,20 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif query.data == "social":
         keyboard = [
             [InlineKeyboardButton("📸 Instagram", url="https://www.instagram.com/rudy__o0/")],
+            [InlineKeyboardButton("✉️ Telegram", url="https://t.me/YOSINBEK_uz")]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text(
+            "🌐 *Ijtimoiy tarmoqlar:*",
+            reply_markup=reply_markup,
+            parse_mode="Markdown"
+        )
+
+def main():
+    app = Application.builder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CallbackQueryHandler(button))
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
