@@ -1,11 +1,7 @@
-import os
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
-TOKEN = os.environ.get("TOKEN")  # Render’dagi Environment Variable
-
-# Rasmlar URL-larini GitHub repository-dan olamiz
-IMAGES_BASE_URL = "https://raw.githubusercontent.com/YOSINBEK-uz/tg-bot/main/images/"
+TOKEN = "8431361772:AAFtxqvzhwblOJ2q7kSq-3urpiLG0wxdiHc"  # BotFather'dan olingan token
 
 # Start komandasi
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -16,7 +12,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.message.reply_text(
-        "Salom! Men shaxsiy botman. Quyidagi tugmalardan tanlang:", 
+        "Salom! Men Yosinxonning botiman. Quyidagi tugmalardan tanlang:", 
         reply_markup=reply_markup
     )
 
@@ -26,7 +22,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
 
     if query.data == "about":
-        await query.edit_message_text("👤 Ismim: Yosinxon\n🎂 Yoshim: 18\n💻 Qiziqish: IT, futbol, CS2 , efootballmobile va mlbb")
+        await query.edit_message_text("👤 Ismim: Yosinxon\n🎂 Yoshim: 18\n💻 Qiziqish: IT, futbol, CS2 va MLBB")
     elif query.data == "instagram":
         keyboard = [
             [InlineKeyboardButton("Instagram sahifam", url="https://www.instagram.com/rudy__o0/")]
@@ -34,21 +30,12 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup = InlineKeyboardMarkup(keyboard)
         await query.edit_message_text("🌐 Instagram:", reply_markup=reply_markup)
     elif query.data == "gallery":
-        # GitHub repository-dagi images papkasidagi barcha fayllarni avtomatik chiqarish
-        import requests
-        from bs4 import BeautifulSoup
-
-        url = IMAGES_BASE_URL
-        response = requests.get(url)
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.text, "html.parser")
-            links = [a['href'] for a in soup.find_all('a', href=True) if a['href'].endswith(('.jpg', '.png', '.jpeg'))]
-            for link in links:
-                full_url = f"https://raw.githubusercontent.com/YOSINBEK-uz/tg-bot/main/images/{link.split('/')[-1]}"
-                await context.bot.send_photo(chat_id=query.message.chat_id, photo=full_url)
-            await query.edit_message_text("📷 Rasmlar ko‘rsatildi!")
-        else:
-            await query.edit_message_text("❌ Rasmlarni olishda xatolik yuz berdi.")
+        await context.bot.send_photo(chat_id=query.message.chat_id, photo=r"/images/photo_2025-11-14_14-47-42.jpg")
+        await context.bot.send_photo(chat_id=query.message.chat_id, photo=r"/images/photo_2025-11-14_14-47-57.jpg")
+        await context.bot.send_photo(chat_id=query.message.chat_id, photo=r"/images/photo_2025-11-14_14-48-01.jpg")
+        await context.bot.send_photo(chat_id=query.message.chat_id, photo=r"/images/photo_2025-11-14_14-48-04.jpg")
+        await context.bot.send_photo(chat_id=query.message.chat_id, photo=r"/images/photo_2025-11-14_14-48-07.jpg")
+        await query.edit_message_text("📷 Rasmlar ko‘rsatildi!")
 
 def main():
     app = Application.builder().token(TOKEN).build()
